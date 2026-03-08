@@ -79,8 +79,8 @@ const Navbar = ({ isHome = false }: { isHome?: boolean }) => {
           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
             <Wrench className="w-5 h-5 text-primary-foreground" />
           </div>
-          <span className="font-display text-xl font-bold text-foreground">
-            FixIt <span className="text-primary">India</span>
+          <span className="font-display text-2xl font-bold text-foreground uppercase tracking-tight">
+            Fixora
           </span>
         </Link>
 

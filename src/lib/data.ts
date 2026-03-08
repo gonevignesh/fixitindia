@@ -113,7 +113,7 @@ export const reviews = [
   },
   {
     id: 2, name: "Arjun Reddy", city: "Hyderabad",
-    text: "Excellent AC repair. Technician explained the issue clearly. Highly recommend FixIt India!",
+    text: "Excellent AC repair. Technician explained the issue clearly. Highly recommend Fixora!",
     rating: 5, service: "AC Repair",
   },
   {

@@ -10,12 +10,12 @@ const Footer = () => (
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
               <Wrench className="w-6 h-6 text-white" />
             </div>
-            <span className="font-display text-2xl font-bold text-white">
-              FixIt <span className="text-primary">India</span>
+            <span className="font-display text-3xl font-black text-white hover:text-primary transition-colors tracking-tighter">
+              Fixora
             </span>
           </Link>
           <p className="text-sm leading-relaxed mb-6">
-            India's largest home services platform. We help customers book reliable & high quality services delivered by trained professionals conveniently at home.
+            Fixora is the future of on-demand home services. We connect skilled professionals with households across India, delivering quality work with a 30-day guarantee.
           </p>
           <div className="flex gap-4">
             {[Instagram, Facebook, Twitter, Linkedin].map((Icon, i) => (
@@ -52,7 +52,7 @@ const Footer = () => (
           <h4 className="font-bold text-white mb-6 uppercase tracking-wider text-xs">Contact</h4>
           <ul className="space-y-4 text-sm font-medium">
             <li className="flex items-center gap-3"><Phone className="w-4 h-4 text-primary" /> +91 98765 43210</li>
-            <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-primary" /> support@fixitindia.in</li>
+            <li className="flex items-center gap-3"><Mail className="w-4 h-4 text-primary" /> support@fixora.in</li>
             <li className="flex items-center gap-3 leading-relaxed">
               <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
               123, Tech Park, Hitech City, <br /> Hyderabad, India
@@ -64,7 +64,7 @@ const Footer = () => (
       <div className="pt-10 border-t border-white/5">
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-xs font-bold text-slate-600">
-            © 2026 FixIt India. All rights reserved. Registered Trademark of FixIt Pvt Ltd.
+            © 2026 Fixora. All rights reserved. Registered Trademark of Fixora Pvt Ltd.
           </p>
           <div className="flex gap-8 text-xs font-bold text-slate-600 uppercase tracking-widest">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

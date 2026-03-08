@@ -177,7 +177,7 @@ const ServiceDetail = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 {[
                   "Verified background check",
-                  "Fixnest standard equipment",
+                  "Fixora standard equipment",
                   "Transparent per-hour rate",
                   "30-day quality warranty",
                   "On-call supervisor support",

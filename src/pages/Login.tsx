@@ -74,7 +74,7 @@ const Login = () => {
             <Wrench className="w-5 h-5 text-primary-foreground" />
           </div>
           <span className="font-display text-2xl font-bold text-foreground">
-            FixIt <span className="text-primary">India</span>
+            Fixora
           </span>
         </Link>
 

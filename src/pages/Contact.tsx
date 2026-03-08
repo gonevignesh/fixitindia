@@ -17,7 +17,7 @@ const Contact = () => (
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           {[
             { icon: Phone, label: "Phone", value: "+91 98765 43210" },
-            { icon: Mail, label: "Email", value: "support@fixnest.in" },
+            { icon: Mail, label: "Email", value: "support@fixora.in" },
             { icon: MapPin, label: "Office", value: "Mumbai, Maharashtra" },
           ].map(({ icon: Icon, label, value }) => (
             <div key={label} className="p-6 rounded-2xl bg-card border border-border text-center">

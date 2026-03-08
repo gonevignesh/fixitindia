@@ -197,7 +197,7 @@ const Index = () => {
         <div className="container relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-primary font-bold tracking-widest uppercase text-sm mb-4 block">FixIt India Promise</span>
+              <span className="text-primary font-bold tracking-widest uppercase text-sm mb-4 block">Fixora Promise</span>
               <h2 className="text-4xl md:text-5xl font-display font-bold mb-8 leading-tight">
                 Premium services, <br />
                 <span className="text-primary">guaranteed safety.</span>

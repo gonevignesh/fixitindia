@@ -168,7 +168,7 @@ const AdminDashboard = () => {
                             <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Control Center active</p>
                         </div>
                         <h1 className="text-3xl md:text-4xl font-display font-bold text-slate-900">
-                            FixIt <span className="text-primary">Operations</span>
+                            Fixora <span className="text-primary">Operations</span>
                         </h1>
                     </div>
                     <div className="flex gap-3">
