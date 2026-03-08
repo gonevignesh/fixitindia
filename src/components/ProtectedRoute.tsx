@@ -24,7 +24,17 @@ const ProtectedRoute = ({ children, allowedRole }: ProtectedRouteProps) => {
     }
 
     if (allowedRole && role !== allowedRole) {
-        // Redirect to their respective dashboard if they try to access a role-protected route
+        // If role is still null even after loading is finished, it means the user has no role assigned yet
+        if (role === null && user) {
+            return (
+                <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
+                    <h2 className="text-xl font-bold mb-2 text-slate-900">Account Setup in Progress</h2>
+                    <p className="text-slate-500 mb-6">We're finalizing your account permissions. This usually takes a few seconds.</p>
+                    <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                </div>
+            );
+        }
+
         if (role === 'admin') return <Navigate to="/admin-dashboard" replace />;
         if (role === 'technician') return <Navigate to="/technician-dashboard" replace />;
         return <Navigate to="/customer-dashboard" replace />;
