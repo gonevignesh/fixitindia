@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Wrench, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
@@ -11,20 +11,34 @@ import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [activeRole, setActiveRole] = useState("customer");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user, role, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  // Auto-redirect if already logged in
+  useEffect(() => {
+    if (user && !authLoading) {
+      if (role === 'admin') {
+        navigate("/admin-dashboard");
+      } else if (role === 'technician') {
+        navigate("/technician-dashboard");
+      } else {
+        navigate("/customer-dashboard");
+      }
+    }
+  }, [user, role, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     if (isSignUp) {
-      const { error } = await signUp(email, password, fullName);
+      const { error } = await signUp(email, password, fullName, activeRole);
       if (error) {
         toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
       } else {
@@ -35,7 +49,14 @@ const Login = () => {
       if (error) {
         toast({ title: "Login failed", description: error.message, variant: "destructive" });
       } else {
-        navigate("/");
+        // Redirection logic
+        if (activeRole === 'admin') {
+          navigate("/admin-dashboard");
+        } else if (activeRole === 'technician') {
+          navigate("/technician-dashboard");
+        } else {
+          navigate("/customer-dashboard");
+        }
       }
     }
     setLoading(false);
@@ -53,15 +74,16 @@ const Login = () => {
             <Wrench className="w-5 h-5 text-primary-foreground" />
           </div>
           <span className="font-display text-2xl font-bold text-foreground">
-            Fix<span className="text-primary">Nest</span>
+            FixIt <span className="text-primary">India</span>
           </span>
         </Link>
 
         <div className="p-8 rounded-2xl bg-card border border-border shadow-lg">
-          <Tabs defaultValue="customer">
-            <TabsList className="w-full mb-6">
-              <TabsTrigger value="customer" className="flex-1">Customer</TabsTrigger>
-              <TabsTrigger value="technician" className="flex-1">Technician</TabsTrigger>
+          <Tabs value={activeRole} onValueChange={setActiveRole}>
+            <TabsList className="w-full mb-6 text-xs h-10 px-1 bg-slate-100/50">
+              <TabsTrigger value="customer" className="flex-1 py-1.5 data-[state=active]:bg-white">Customer</TabsTrigger>
+              <TabsTrigger value="technician" className="flex-1 py-1.5 data-[state=active]:bg-white">Technician</TabsTrigger>
+              <TabsTrigger value="admin" className="flex-1 py-1.5 data-[state=active]:bg-white">Admin</TabsTrigger>
             </TabsList>
 
             <TabsContent value="customer">
@@ -73,8 +95,20 @@ const Login = () => {
               </p>
             </TabsContent>
             <TabsContent value="technician">
-              <h2 className="font-display text-xl font-bold text-foreground mb-1">Technician Login</h2>
-              <p className="text-sm text-muted-foreground mb-6">Access your dashboard and bookings</p>
+              <h2 className="font-display text-xl font-bold text-foreground mb-1">
+                {isSignUp ? "Join as Professional" : "Technician Login"}
+              </h2>
+              <p className="text-sm text-muted-foreground mb-6">
+                {isSignUp ? "Register to start accepting jobs" : "Access your dashboard and bookings"}
+              </p>
+            </TabsContent>
+            <TabsContent value="admin">
+              <h2 className="font-display text-xl font-bold text-foreground mb-1">
+                {isSignUp ? "Create Admin Account" : "Admin Portal"}
+              </h2>
+              <p className="text-sm text-muted-foreground mb-6">
+                {isSignUp ? "Register a new system administrator" : "System-wide management & operations"}
+              </p>
             </TabsContent>
           </Tabs>
 

@@ -4,12 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const Contact = () => (
-  <div className="min-h-screen bg-background">
-    <Navbar />
+  <>
     <section className="pt-24 pb-20">
       <div className="container max-w-4xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-14">
@@ -60,8 +57,7 @@ const Contact = () => (
         </motion.div>
       </div>
     </section>
-    <Footer />
-  </div>
+  </>
 );
 
 export default Contact;

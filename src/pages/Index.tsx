@@ -4,11 +4,10 @@ import { Search, Star, Shield, Clock, MapPin, ChevronRight, ArrowRight } from "l
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { services, technicians, reviews, cities } from "@/lib/data";
 import heroImage from "@/assets/hero-technician.jpg";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -20,11 +19,10 @@ const fadeUp = {
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { user, role } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
+    <>
       {/* Hero */}
       <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
@@ -47,33 +45,46 @@ const Index = () => {
                 Fast, reliable, and affordable home services across India.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 p-4 rounded-2xl bg-card border border-border shadow-lg">
-                <Select>
-                  <SelectTrigger className="w-full sm:w-40">
-                    <MapPin className="w-4 h-4 mr-2 text-primary" />
-                    <SelectValue placeholder="City" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cities.map((c) => (
-                      <SelectItem key={c} value={c.toLowerCase()}>{c}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search services (e.g. AC repair)"
-                    className="pl-10"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                  />
+              {user ? (
+                <div className="p-1 mt-6">
+                  <Link to={role === 'technician' ? '/technician-dashboard' : role === 'admin' ? '/admin-dashboard' : '/customer-dashboard'}>
+                    <Button size="lg" className="w-full sm:w-auto rounded-xl px-8 shadow-lg shadow-primary/20 hover:shadow-primary/30 py-7 text-lg gap-2">
+                      Go to Dashboard <ArrowRight className="w-5 h-5 ml-1" />
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-muted-foreground mt-4 ml-1">
+                    You are logged in as <span className="text-foreground font-semibold ">{role === 'admin' ? 'Admin' : role === 'technician' ? 'Technician' : 'Customer'}</span>
+                  </p>
                 </div>
-                <Link to="/services">
-                  <Button className="w-full sm:w-auto">
-                    Search <ArrowRight className="w-4 h-4 ml-1" />
-                  </Button>
-                </Link>
-              </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-3 p-4 rounded-2xl bg-card border border-border shadow-lg">
+                  <Select>
+                    <SelectTrigger className="w-full sm:w-40">
+                      <MapPin className="w-4 h-4 mr-2 text-primary" />
+                      <SelectValue placeholder="City" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {cities.map((c) => (
+                        <SelectItem key={c} value={c.toLowerCase()}>{c}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search services (e.g. AC repair)"
+                      className="pl-10"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <Link to="/services">
+                    <Button className="w-full sm:w-auto">
+                      Search <ArrowRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              )}
 
               <div className="flex items-center gap-6 mt-8 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
@@ -101,7 +112,7 @@ const Index = () => {
                 <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-primary/20 to-accent/20 blur-2xl" />
                 <img
                   src={heroImage}
-                  alt="FixNest India technician ready to help"
+                  alt="FixIt India technician ready to help"
                   className="relative rounded-3xl shadow-2xl w-full object-cover aspect-[4/3]"
                 />
               </div>
@@ -265,8 +276,7 @@ const Index = () => {
         </div>
       </section>
 
-      <Footer />
-    </div>
+    </>
   );
 };
 

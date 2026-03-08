@@ -97,7 +97,7 @@ export const reviews = [
   },
   {
     id: 2, name: "Arjun Reddy", city: "Hyderabad",
-    text: "Excellent AC repair. Technician explained the issue clearly. Highly recommend FixNest!",
+    text: "Excellent AC repair. Technician explained the issue clearly. Highly recommend FixIt India!",
     rating: 5, service: "AC Repair",
   },
   {

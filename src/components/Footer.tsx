@@ -11,7 +11,7 @@ const Footer = () => (
               <Wrench className="w-5 h-5 text-primary-foreground" />
             </div>
             <span className="font-display text-xl font-bold text-background">
-              Fix<span className="text-primary">Nest</span>
+              FixIt <span className="text-primary">India</span>
             </span>
           </Link>
           <p className="text-sm text-background/60 leading-relaxed">
@@ -42,13 +42,13 @@ const Footer = () => (
           <h4 className="font-display font-semibold text-background mb-4">Contact</h4>
           <ul className="space-y-3 text-sm">
             <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-primary" /> +91 98765 43210</li>
-            <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-primary" /> support@fixnest.in</li>
+            <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-primary" /> support@fixitindia.in</li>
             <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> Mumbai, India</li>
           </ul>
         </div>
       </div>
       <div className="border-t border-background/10 pt-6 text-center text-xs text-background/40">
-        © 2026 FixNest India. All rights reserved.
+        © 2026 FixIt India. All rights reserved.
       </div>
     </div>
   </footer>

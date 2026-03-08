@@ -68,7 +68,10 @@ BEGIN
     COALESCE(NEW.phone, NEW.raw_user_meta_data ->> 'phone', '')
   );
   INSERT INTO public.user_roles (user_id, role)
-  VALUES (NEW.id, 'customer');
+  VALUES (
+    NEW.id, 
+    COALESCE((NEW.raw_user_meta_data ->> 'role')::public.app_role, 'customer'::public.app_role)
+  );
   RETURN NEW;
 END;
 $$;
@@ -151,6 +154,20 @@ CREATE POLICY "Customers can create bookings" ON public.bookings
 
 CREATE POLICY "Customers can update own bookings" ON public.bookings
   FOR UPDATE TO authenticated USING (auth.uid() = customer_id);
+
+CREATE POLICY "Technicians can view assigned or unassigned bookings" ON public.bookings
+  FOR SELECT TO authenticated USING (
+    technician_id IN (SELECT id FROM public.technician_profiles WHERE user_id = auth.uid())
+    OR 
+    (technician_id IS NULL AND status = 'pending')
+  );
+
+CREATE POLICY "Technicians can update assigned bookings" ON public.bookings
+  FOR UPDATE TO authenticated USING (
+    technician_id IN (SELECT id FROM public.technician_profiles WHERE user_id = auth.uid())
+    OR 
+    (technician_id IS NULL AND status = 'pending')
+  );
 
 -- Reviews table
 CREATE TABLE public.reviews (

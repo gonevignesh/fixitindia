@@ -1,7 +1,5 @@
 import { motion } from "framer-motion";
 import { Shield, Users, Award, Heart } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const stats = [
   { label: "Happy Customers", value: "50K+", icon: Heart },
@@ -11,12 +9,11 @@ const stats = [
 ];
 
 const About = () => (
-  <div className="min-h-screen bg-background">
-    <Navbar />
+  <>
     <section className="pt-24 pb-20">
       <div className="container max-w-4xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-14">
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">About FixNest India</h1>
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">About FixIt India</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             We're on a mission to make home services reliable, transparent, and accessible to every Indian household.
           </p>
@@ -42,7 +39,7 @@ const About = () => (
           className="prose prose-lg max-w-none text-muted-foreground space-y-4"
         >
           <p>
-            FixNest India was born from a simple frustration — finding a trustworthy technician for home repairs shouldn't be this hard. We built a platform that connects homeowners with verified, skilled professionals who deliver quality work at fair prices.
+            FixIt India was born from a simple frustration — finding a trustworthy technician for home repairs shouldn't be this hard. We built a platform that connects homeowners with verified, skilled professionals who deliver quality work at fair prices.
           </p>
           <p>
             Every technician on our platform goes through a rigorous verification process including identity checks, skill assessments, and background verification. We believe in transparency — you'll always know the price before booking, with no hidden charges.
@@ -53,8 +50,7 @@ const About = () => (
         </motion.div>
       </div>
     </section>
-    <Footer />
-  </div>
+  </>
 );
 
 export default About;
