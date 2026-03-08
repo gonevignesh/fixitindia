@@ -19,6 +19,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,8 +51,15 @@ const CustomerDashboard = () => {
     activeCount: 0,
     rewardPoints: "1,250",
     walletBalance: "₹0",
+    walletBalance: "₹0",
     savedListings: "8"
   });
+
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<any>(null);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   const fetchCustomerData = async () => {
     if (!user) return;
@@ -63,10 +72,12 @@ const CustomerDashboard = () => {
           scheduled_date,
           scheduled_time,
           total_amount,
+          technician_id,
           services(name, category, icon),
           technician_profiles(
             profiles(full_name)
-          )
+          ),
+          reviews(id)
         `)
         .eq('customer_id', user.id)
         .order('created_at', { ascending: false });
@@ -81,6 +92,9 @@ const CustomerDashboard = () => {
           date: `${b.scheduled_date} at ${b.scheduled_time}`,
           status: b.status.charAt(0).toUpperCase() + b.status.slice(1),
           technician: (b.technician_profiles as any)?.profiles?.full_name || "Assigning...",
+          technicianId: b.technician_id,
+          fullId: b.id,
+          hasReview: Array.isArray(b.reviews) ? b.reviews.length > 0 : !!b.reviews,
           price: `₹${b.total_amount?.toLocaleString('en-IN')}`
         }));
         setBookings(formatted);
@@ -92,6 +106,28 @@ const CustomerDashboard = () => {
       console.error("Error fetching customer data:", e);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const submitReview = async () => {
+    if (!selectedBooking || rating === 0) return;
+    setSubmittingReview(true);
+    try {
+      const { error } = await supabase.from('reviews').insert({
+        booking_id: selectedBooking.fullId,
+        customer_id: user?.id,
+        technician_id: selectedBooking.technicianId,
+        rating,
+        comment
+      });
+      if (error) throw error;
+      toast({ title: "Review Submitted", description: "Thank you for your feedback! The technician's rating has been updated." });
+      setReviewModalOpen(false);
+      fetchCustomerData();
+    } catch (e: any) {
+      toast({ title: "Submission Failed", description: e.message, variant: "destructive" });
+    } finally {
+      setSubmittingReview(false);
     }
   };
 
@@ -225,7 +261,29 @@ const CustomerDashboard = () => {
                                     {item.status}
                                   </Badge>
                                 </td>
-                                <td className="px-6 py-5 text-right font-bold text-slate-900">{item.price}</td>
+                                <td className="px-6 py-5 text-right font-bold text-slate-900">
+                                  <div className="flex items-center justify-end gap-3">
+                                    <span>{item.price}</span>
+                                    {item.status === "Completed" && !item.hasReview && (
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="rounded-lg h-8 px-3 text-xs font-bold border-primary text-primary hover:bg-primary/5 transition-all"
+                                        onClick={() => {
+                                          setSelectedBooking(item);
+                                          setRating(0);
+                                          setComment("");
+                                          setReviewModalOpen(true);
+                                        }}
+                                      >
+                                        Rate It
+                                      </Button>
+                                    )}
+                                    {item.status === "Completed" && item.hasReview && (
+                                      <Badge className="bg-slate-100 text-slate-500 hover:bg-slate-100 border-none">Rated</Badge>
+                                    )}
+                                  </div>
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -313,6 +371,38 @@ const CustomerDashboard = () => {
           </>
         )}
       </main>
+
+      {/* Review Dialog */}
+      <Dialog open={reviewModalOpen} onOpenChange={setReviewModalOpen}>
+        <DialogContent className="sm:max-w-md rounded-[2rem] p-6 border-none shadow-2xl">
+          <DialogHeader className="mb-4">
+            <DialogTitle className="text-2xl font-display font-bold">Rate the Service</DialogTitle>
+            <DialogDescription className="text-sm font-medium">
+              How was your experience with <span className="text-slate-900 font-bold">{selectedBooking?.technician}</span>?
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center gap-2 py-4">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button key={star} onClick={() => setRating(star)} className="focus:outline-none transition-transform hover:scale-110">
+                <Star className={`w-10 h-10 ${star <= rating ? "text-amber-500 fill-amber-500 drop-shadow-sm" : "text-slate-200 fill-slate-50"}`} />
+              </button>
+            ))}
+          </div>
+          <Textarea
+            placeholder="Write a quick comment about the service to help others..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            className="rounded-2xl border-slate-200 resize-none h-28 p-4 font-medium focus-visible:ring-primary/20 bg-slate-50"
+          />
+          <DialogFooter className="mt-6 gap-3 sm:justify-center">
+            <Button variant="outline" className="rounded-xl px-6 font-bold w-full sm:w-auto" onClick={() => setReviewModalOpen(false)}>Cancel</Button>
+            <Button className="rounded-xl px-10 font-bold w-full sm:w-auto shadow-lg shadow-primary/20" disabled={rating === 0 || submittingReview} onClick={submitReview}>
+              {submittingReview ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+              Submit Review
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
